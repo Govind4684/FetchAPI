@@ -116,8 +116,6 @@ function main(Products) {
         // Internal object url to safely link image to product
         const objectURL = URL.createObjectURL(blob);
 
-        console.log(objectURL);
-
         const section = document.createElement("section");
         const para = document.createElement("p");
         const heading = document.createElement("h2");

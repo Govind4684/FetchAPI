@@ -15,17 +15,62 @@ function main(Products) {
     const searchBtn = document.querySelector("button");
     const main = document.querySelector("main");
 
+    // setting default value to lastCategory
     let lastCateory = category.value;
     let lastSearch = '';
 
     let categoryGroup;
     let finalGroup;
 
+    // initially set final group of results to all products, to be displayed
     finalGroup = Products;
-
     updateDisplay();
 
+    // set empty values to result container, before searching function executes
+    categoryGroup = [];
+    finalGroup = [];
+    
+    searchBtn.addEventListener("click", selectCategory);
 
+    function selectCategory(e) {
+        // disable the default page reload event of form to preserve data
+        e.preventDefault();
+
+        // erase the previously hold results
+        categoryGroup = [];
+        finalGroup = [];
+
+        if(category.value === lastCateory && searchTerm.value.trim() === lastSearch){
+            return;
+        } else {
+            lastCateory = category.value;
+            lastSearch = searchTerm.value.trim();
+
+            if(lastCateory === 'All'){
+                categoryGroup = Products;
+                selectProducts();
+            } else {
+                const lowerCaseType = category.value.toLowerCase();
+                categoryGroup = Products.filter( product => product.type === lowerCaseType);
+                selectProducts();
+            }
+        }
+
+    }
+
+    function selectProducts(){
+        
+        if(searchTerm.value.trim() === ''){
+            // if no items to search in category, display all items in that category
+            finalGroup = categoryGroup;
+        } else {
+            const lowerCaseSearchTerm = searchTerm.value.trim().toLowerCase();
+            // if search item is there, filter through json using includes method to select particular product
+            finalGroup = categoryGroup.filter(product => product.name.includes(lowerCaseSearchTerm));      
+        }
+
+        updateDisplay();
+    }
 
     function updateDisplay() {
         // remove prvious results displayed in <main>
@@ -35,7 +80,7 @@ function main(Products) {
 
         if(finalGroup.length === 0){
             const para = document.createElement("p");
-            para.textContent = "No resultst to display";
+            para.textContent = "No results to display";
             main.appendChild(para);
         } else {
             for(const product of finalGroup){

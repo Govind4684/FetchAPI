@@ -15,11 +15,32 @@ function main(Products) {
     const searchBtn = document.querySelector("button");
     const main = document.querySelector("main");
 
+    let lastCateory = category.value;
+    let lastSearch = '';
+
+    let categoryGroup;
+    let finalGroup;
+
+    finalGroup = Products;
+
     updateDisplay();
 
+
+
     function updateDisplay() {
-        for ( const product of Products) {
-            fetchBlob(product);
+        // remove prvious results displayed in <main>
+        while(main.firstChild){
+            main.removeChild(main.firstChild);
+        }
+
+        if(finalGroup.length === 0){
+            const para = document.createElement("p");
+            para.textContent = "No resultst to display";
+            main.appendChild(para);
+        } else {
+            for(const product of finalGroup){
+                fetchBlob(product);
+            }
         }
     }
 
